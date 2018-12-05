@@ -1,0 +1,4 @@
+Variable=v_[a-z]+
+Method=CENAS_.*
+Class=COISAS_.*
+Interface=.*

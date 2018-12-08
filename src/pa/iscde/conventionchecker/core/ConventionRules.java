@@ -17,17 +17,24 @@ public class ConventionRules {
 	private Map<String, String> rules;
 	private final String FILELOCATION = ConventionCheckerView.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/rules.file";
 	
+	/**
+	 * Creates the rule object reading the rules from the existing file
+	 */
 	public ConventionRules() {
 		rules = new HashMap<String, String>();
 		readRulesFile(rules); 
 	}
 	
+	/**
+	 * @return a map with all the rules
+	 */
 	public Map<String, String> getRules() {
 		return rules;
 	}
 	
 	/**
 	 * Update the rule file accordingly
+	 * 
 	 * @param key convention object name
 	 * @param value rule to be applied to the object
 	 */
@@ -35,10 +42,16 @@ public class ConventionRules {
 		rules.put(key, value);
 	}
 	
+	/**
+	 * @return the number of the rules
+	 */
 	public int getSize() {
 		return rules.size();
 	}
 	
+	/**
+	 * @return the keys of the rules
+	 */
 	public Set<String> getKeys() {
 		return rules.keySet();
 	}
@@ -52,19 +65,14 @@ public class ConventionRules {
 			
 			try {
 				 for(String key : rules.keySet()) {
-					 writer.append(key);
-					 writer.append('=');
-					 writer.append(rules.get(key));
+					 writer.append(key + "=" + rules.get(key));
 					 writer.newLine();
 				 }
-			     
-			 
+
 				writer.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -72,8 +80,8 @@ public class ConventionRules {
 	
 	/**
 	 * Read Rule file to populate our plugin view
-	 * 
-	 * @param p_rules
+	 *
+	 * @param p_rules OUT parameter
 	 */
 	private void readRulesFile(Map<String, String> p_rules) {
 		try {

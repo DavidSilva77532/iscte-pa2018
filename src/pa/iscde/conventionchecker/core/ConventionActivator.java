@@ -17,17 +17,25 @@ public class ConventionActivator implements BundleActivator {
 	private static JavaEditorServices editorServices;
 	private static ProjectBrowserServices browserServices;
 
+	/**
+	 * Get Activator class since its working as Singleton.
+	 * The activator has all references to other services
+	 * @return activator instance
+	 */
 	public static ConventionActivator getInstance() {
 		return instance;
 	}
 	
+	/**
+	 * @return context
+	 */
 	public static BundleContext getContext() {
 		return context;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	/**
+	 * Starts all the services
+	 * @param bundleContext
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		instance = this;
@@ -38,36 +46,49 @@ public class ConventionActivator implements BundleActivator {
 		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	/**
+	 * @param bundleContext
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
 		ConventionActivator.context = null;
 		instance = null;
 	}
 	
+	/**
+	 * Starts the Java Editor Service
+	 */
 	private void initJavaEditorService() {
 		ServiceReference<JavaEditorServices> serviceReference2 = context.getServiceReference(JavaEditorServices.class);
 		editorServices = context.getService(serviceReference2);
 	}
 	
+	/**
+	 * Starts the Java Browser Service
+	 */
 	private void initJavaBrowserService() {
 		ServiceReference<ProjectBrowserServices> serviceReference2 = context.getServiceReference(ProjectBrowserServices.class);
 		browserServices = context.getService(serviceReference2);
 	}
 	
-	
+	/**
+	 * Registers my convention service - Do I need this? Or should I use the extension points only?
+	 */
 	private void registerConvetionService () {
 		conventionService = new ConventionCheckerServiceImpl();
 		context.registerService(ConventionCheckerService.class, conventionService, null);
 				
 	}
 	
+	/**
+	 * @return the Java Editor Service
+	 */
 	public static JavaEditorServices getJavaEditorService() {
 		return editorServices;
 	}
 	
+	/**
+	 * @return the Java Browser Service
+	 */
 	public static ProjectBrowserServices getJavaBrowserService() {
 		return browserServices;
 	}

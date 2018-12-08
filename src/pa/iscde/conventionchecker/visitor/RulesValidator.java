@@ -5,11 +5,14 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pa.iscde.conventionchecker.ext.LogExt;
+
 public class RulesValidator {
-	private ArrayList<Log> stack = new ArrayList<>();
+	private ArrayList<LogExt> stack = new ArrayList<>();
 		
 	/**
 	 * Validate the node name against the rule requested
+	 * 
 	 * @param p_input node name
 	 * @param p_regex regex to validate against the input name
 	 * @param p_offset offset in the file of this node
@@ -29,18 +32,19 @@ public class RulesValidator {
 	 * Used for new validations
 	 */
 	public void resetStack() {
-		stack = new ArrayList<>();
+		stack = new ArrayList<LogExt>();
 	}
 	
 	/**
 	 * Resets the current errors for a specific file
+	 * 
 	 * @param p_fileName
 	 */
-	public ArrayList<Log> resetStack(String p_fileName) {
+	public ArrayList<LogExt> resetStack(String p_fileName) {
 		//TODO- refactor this to use a global map instead of looping through the existing array			
-		for(Iterator<Log> it = stack.iterator(); it.hasNext();) {
-			Log log = it.next();
-			if (log.getFileName().equals(p_fileName))
+		for(Iterator<LogExt> it = stack.iterator(); it.hasNext();) {
+			LogExt log = it.next();
+			if (log.getFilePath().equals(p_fileName))
 				it.remove();
 		}
 		
@@ -50,7 +54,7 @@ public class RulesValidator {
 	/**
 	 * @return all errors found
 	 */
-	public ArrayList<Log> getStack(){
+	public ArrayList<LogExt> getStack(){
 		return stack;
 	}
 	
@@ -58,12 +62,12 @@ public class RulesValidator {
 	 * @param p_fileName
 	 * @return all errors found
 	 */
-	public ArrayList<Log> getStack(String p_fileName){
+	public ArrayList<LogExt> getStack(String p_fileName){
 		//TODO- refactor this to use a global map instead of looping through the existing array
-		ArrayList<Log> retStack = new ArrayList<>();
+		ArrayList<LogExt> retStack = new ArrayList<>();
 		
-		for(Log log : stack) {
-			if (log.getFileName().equals(p_fileName))
+		for(LogExt log : stack) {
+			if (log.getFilePath().equals(p_fileName))
 				retStack.add(log);
 		}
 		
@@ -72,6 +76,7 @@ public class RulesValidator {
 	
 	/**
 	 * Adds the node to the error list if that exact node hasn't been added before
+	 * 
 	 * @param p_input node name
 	 * @param p_regex regex to validate against the input name
 	 * @param p_offset offset in the file of this node
@@ -79,8 +84,8 @@ public class RulesValidator {
 	 * @param p_fileName filename of the processed file
 	 */
 	private void addUnique(String p_input, String p_regex, int p_offset, int p_line, String p_fileName) {
-		for(Log log : stack) {
-			if (log.getValue().equals(p_input) && log.getPosition() == p_offset && log.getLine() == p_line && log.getFileName().equals(p_fileName)) {
+		for(LogExt log : stack) {
+			if (log.getValue().equals(p_input) && log.getPosition() == p_offset && log.getLine() == p_line && log.getFilePath().equals(p_fileName)) {
 				return;
 			}
 		}

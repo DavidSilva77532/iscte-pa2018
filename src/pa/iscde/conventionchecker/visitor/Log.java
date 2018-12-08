@@ -1,6 +1,8 @@
 package pa.iscde.conventionchecker.visitor;
 
-public class Log {
+import pa.iscde.conventionchecker.ext.LogExt;
+
+public class Log implements LogExt {
 	private String value;
 	private int offset;
 	private String message;
@@ -31,7 +33,7 @@ public class Log {
 		return this.line;
 	}
 	
-	public String getFileName() {
+	public String getFilePath() {
 		return this.fileName;
 	}
 }

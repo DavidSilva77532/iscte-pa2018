@@ -19,6 +19,7 @@ public class Parser {
 	
 	/**
 	 * parse a file and validate all the convention rules applicable
+	 * 
 	 * @param file is the file that is going to be analyzed
 	 * @param visitor the class that is going to go through the syntax tree and apply the rules
 	 * @return AST parser
@@ -38,6 +39,7 @@ public class Parser {
 	
 	/**
 	 * get the AST parser and set all configs
+	 * 
 	 * @return AST parser
 	 */
 	private static ASTParser getParser(File f) {
@@ -53,6 +55,7 @@ public class Parser {
 
 	/**
 	 * reads the file to be processed by the parser
+	 * 
 	 * @return the file as a string
 	 */
 	private static String readSource(File file) {
@@ -68,6 +71,12 @@ public class Parser {
 		return src.toString();
 	}
 	
+	/**
+	 * Go through all the files and parse them all
+	 * 
+	 * @param files is a collection of all the files to be processed
+	 * @param visitor the class that is going to go through the syntax tree and apply the rules
+	 */
 	public static void parseAll(SortedSet<SourceElement> files, ASTVisitor visitor) {
 		// Parse multiple files
 		for (SourceElement e : files) {

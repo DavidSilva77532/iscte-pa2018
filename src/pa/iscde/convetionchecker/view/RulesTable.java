@@ -21,7 +21,7 @@ import pa.iscde.conventionchecker.core.ConventionRules;
 public class RulesTable {
 	private ConventionRules rules;
 	private Composite view;
-	private String[] headers = { "Type", "Regex" };
+	private static String[] HEADER = { "Type", "Regex" };
 	
 	public RulesTable (ConventionRules p_rules,
 					Composite p_view) {
@@ -29,24 +29,27 @@ public class RulesTable {
 		view = p_view;
 		createTable();
 	}
-	
+
 	/**
 	 * Create the header record
+	 * 
 	 * @param table
 	 */
-	public void createHeader(Table table) {
+	private void createHeader(Table table) {
 		// Prepare the header
-        for (int i = 0; i < headers.length; i++) {
+        for (int i = 0; i < HEADER.length; i++) {
             TableColumn column = new TableColumn(table, SWT.NONE);
-            column.setText(headers[i]);
+            column.setText(HEADER[i]);
             table.getColumn(i).setWidth(100);
         }
 	}
 	
 	/**
 	 * Update cells with the content from our file
+	 * 
+	 * @param table
 	 */
-	public void updateCellsByFile(Table table) {
+	private void updateCellsByFile(Table table) {
 		Map<String, String> myRules = rules.getRules();
 		
 		// Populate the cells with our rules loaded previously from the file
@@ -58,10 +61,12 @@ public class RulesTable {
 	}
 	
 	/**
-	 * Create editable cells
+	 * Create editable cells. 
+	 * Update our rule map whenever a change is triggered.
+	 * 
 	 * @param table
 	 */
-	public void createEditCells(Table table) {
+	private void createEditCells(Table table) {
 		//create editable cells
         final TableEditor editor = new TableEditor(table);
         editor.horizontalAlignment = SWT.LEFT;
@@ -74,23 +79,23 @@ public class RulesTable {
         table.addSelectionListener(new SelectionAdapter() {
           
         	public void widgetSelected(SelectionEvent e) {
-            // Clean up any previous editor control
+
             Control oldEditor = editor.getEditor();
             if (oldEditor != null)
               oldEditor.dispose();
 
-            // Identify the selected row
             TableItem item = (TableItem) e.item;
             if (item == null)
               return;
 
-            // The control that will be the editor must be a child of the Table
             Text newEditor = new Text(table, SWT.NONE);
             newEditor.setText(item.getText(EDITABLECOLUMN));
+            
             newEditor.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent me) {
             		Text text = (Text) editor.getEditor();
             		editor.getItem().setText(EDITABLECOLUMN, text.getText());
+            		
             		rules.updateRule(item.getText(0), item.getText(1));
             	}
             });
@@ -104,6 +109,7 @@ public class RulesTable {
 	
 	/**
 	 * Create table and prepare all listeners. Also populate the initial table with the rules file.
+	 * 
 	 * @param p_view
 	 */
 	public void createTable() {
@@ -116,6 +122,7 @@ public class RulesTable {
         data.heightHint = 200;
         view.setLayoutData(data);
         
+        // Create and populate the cells
         createHeader(table);
         updateCellsByFile(table);
         createEditCells(table);   

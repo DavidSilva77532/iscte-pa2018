@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import pa.iscde.conventionchecker.core.ConventionRules;
+import pa.iscde.conventionchecker.ext.LogExt;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class ConventionVisitor extends ASTVisitor {
@@ -27,28 +28,53 @@ public class ConventionVisitor extends ASTVisitor {
 		this.rules = p_rules;
 	}
 	
+	/**
+	 * Sets the filename (Path) for the next file to be analyzed
+	 * 
+	 * @param p_fileName the file path of the file for which we are going to analyze
+	 */
 	public void setFileName(String p_fileName) {
 		this.fileName = p_fileName;
 	}
 	
+	/**
+	 * Cleans all the errors
+	 */
 	public void resetStack() {
 		myErrors.resetStack();
 	}
 	
+	/**
+	 * Cleans all the errors for a specific file
+	 * 
+	 * @param p_fileName the file path of the file for which we want the errors
+	 */
 	public void resetStack(String p_fileName) {
 		myErrors.resetStack(p_fileName);
 	}
 	
-	public ArrayList<Log> getErrors(){
+	/**
+	 * Gets all the errors
+	 * 
+	 * @return the array with errors
+	 */
+	public ArrayList<LogExt> getErrors(){
 		return myErrors.getStack();
 	}
 	
-	public ArrayList<Log> getErrors(String p_fileName){
+	/**
+	 * Gets the errors for a specified file
+	 * 
+	 * @param p_fileName the file path of the file for which we want the errors
+	 * @return the array with errors associated with one file
+	 */
+	public ArrayList<LogExt> getErrors(String p_fileName){
 		return myErrors.getStack(p_fileName);
 	}
 	
 	/**
 	 * returns the line where it was parsed.
+	 * 
 	 * @param node
 	 * @return line number
 	 */
@@ -59,6 +85,7 @@ public class ConventionVisitor extends ASTVisitor {
 	
 	/**
 	 * visits interfaces and classes nodes
+	 * 
 	 * @param node
 	 * @return
 	 */
@@ -77,6 +104,7 @@ public class ConventionVisitor extends ASTVisitor {
 	
 	/**
 	 * visits Methods nodes and parameters
+	 * 
 	 * @param node
 	 * @return
 	 */
@@ -99,6 +127,7 @@ public class ConventionVisitor extends ASTVisitor {
 
 	/**
 	 * visits Variable declaration nodes
+	 * 
 	 * @param node
 	 * @return
 	 */
@@ -124,6 +153,7 @@ public class ConventionVisitor extends ASTVisitor {
 	/**
 	 * visits variable declarations inside functions (all variables in fact)
 	 * We still need the other node validation to access the modifiers of constants
+	 * 
 	 * @param node
 	 * @return
 	 */

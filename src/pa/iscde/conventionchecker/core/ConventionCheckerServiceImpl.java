@@ -14,6 +14,7 @@ public class ConventionCheckerServiceImpl implements ConventionCheckerService{
 
 	@Override
 	public ArrayList<Log> getConventionErrors() {
+		// TO-DO
 		return errors;
 	}
 

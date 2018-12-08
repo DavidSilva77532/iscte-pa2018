@@ -3,6 +3,10 @@ package pa.iscde.convetionchecker.view;
 import java.io.File;
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.RowLayout;
@@ -12,8 +16,9 @@ import org.osgi.framework.BundleContext;
 
 import pa.iscde.conventionchecker.core.ConventionActivator;
 import pa.iscde.conventionchecker.core.ConventionRules;
+import pa.iscde.conventionchecker.ext.ConventionCheckerExt;
+import pa.iscde.conventionchecker.ext.LogExt;
 import pa.iscde.conventionchecker.visitor.ConventionVisitor;
-import pa.iscde.conventionchecker.visitor.Log;
 import pa.iscde.conventionchecker.visitor.Parser;
 
 import org.eclipse.swt.events.SelectionEvent;
@@ -29,7 +34,6 @@ public class ConventionCheckerView implements PidescoView {
 	private RulesTable conventionTable;
 	private JavaEditorServices javaServ;
 	private ConventionVisitor checker;
-
 	
 	public ConventionCheckerView() {
 		rules = new ConventionRules();
@@ -40,6 +44,9 @@ public class ConventionCheckerView implements PidescoView {
 	
 	/**
 	 * Create Save button on my view to save the grid to the rule file
+	 * 
+	 * @param viewArea 
+	 * @param imageMap
 	 */
 	private void createSaveButton(Composite viewArea, Map<String, Image> imageMap) {
 		Button button = new Button(viewArea, SWT.PUSH);
@@ -61,6 +68,9 @@ public class ConventionCheckerView implements PidescoView {
 	
 	/**
 	 * Create Refresh button on my view to parse the files again
+	 * 
+	 * @param viewArea 
+	 * @param imageMap
 	 */
 	private void createRefreshButton(Composite viewArea, Map<String, Image> imageMap) {
 		Button button = new Button(viewArea, SWT.PUSH);
@@ -89,21 +99,28 @@ public class ConventionCheckerView implements PidescoView {
 		File f = javaServ.getOpenedFile();
 		
 		if (f != null)
-			for(Log l: checker.getErrors(javaServ.getOpenedFile().getAbsolutePath())) {
+			for(LogExt l: checker.getErrors(javaServ.getOpenedFile().getAbsolutePath())) {
 				javaServ.addAnnotation(javaServ.getOpenedFile(), AnnotationType.WARNING, l.getMessage(), l.getPosition()
 						, l.getValue().length());
 			}
 	}
 	
 	/**
-	 * Create table and prepare all listeners. 
+	 * Create table and prepare all table listeners. 
 	 * Also populate the initial table with the rules file.
+	 * 
 	 * @param p_view
 	 */
 	public void createTable(Composite p_view) {
 		conventionTable = new RulesTable(rules, p_view);
 	}
 	
+	/**
+	 * Starts my convention checker components. 
+	 * 
+	 * @param viewArea
+	 * @param imageMap
+	 */
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		viewArea.setLayout(new RowLayout(SWT.HORIZONTAL));
@@ -120,18 +137,44 @@ public class ConventionCheckerView implements PidescoView {
 			public void fileSaved(File file) {
 				checker.resetStack(file.getAbsolutePath());
 				Parser.parse(file, checker);
-				//annotateCurrentFile();
+				//annotateCurrentFile(); TODO
 			}
 			
 			@Override
 			public void fileOpened(File file) {
 				checker.resetStack(file.getAbsolutePath());
 				Parser.parse(file, checker);
-				//annotateCurrentFile();
+				//annotateCurrentFile(); TODO
 			}
 		};
 		
 		this.javaServ.addListener(listener);
+		
+		
+		triggerExtensions(viewArea);
+		
+		
+		
+	}
+	
+	/**
+	 * Go through our extension points and execute methods for whatever plugin's that are connected
+	 * 
+	 * @param viewArea
+	 */
+	private void triggerExtensions(Composite viewArea) {
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		IConfigurationElement[] elements = reg.getConfigurationElementsFor("pt.iscte.pidesco.MyPlugin.checkerExt");
+		for(IConfigurationElement e : elements) {
+			try {
+				ConventionCheckerExt action = (ConventionCheckerExt) e.createExecutableExtension("class");
+				action.changeView(viewArea, rules.getRules()); // allows to change the checker view and gives the rules
+				action.getErrors(checker.getErrors()); // gives the convention errors
+				viewArea.layout();
+			} catch (CoreException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 }

@@ -6,7 +6,7 @@
          name="My View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pt.iscte.pidesco.ConventionChecker.ConventionCheckerView">
+            class="pt.iscte.pidesco.conventionchecker.ConventionCheckerView">
       </view>
    </extension>
 

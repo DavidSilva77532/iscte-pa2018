@@ -1,4 +1,4 @@
-package pt.iscte.pidesco.ConventionChecker;
+package pt.iscte.pidesco.conventionchecker;
 
 import java.io.File;
 import java.util.Map;
@@ -10,21 +10,22 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-
-import ASTVisitor.ConventionVisitor;
-import ASTVisitor.Log;
-import ASTVisitor.Parser;
-
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
+import pt.iscte.pidesco.conventionchecker.visitor.ConventionVisitor;
+import pt.iscte.pidesco.conventionchecker.visitor.Log;
+import pt.iscte.pidesco.conventionchecker.visitor.Parser;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.AnnotationType;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class ConventionCheckerView implements PidescoView {
 	private ConventionRules rules;
 	private RulesTable conventionTable;
+	private JavaEditorServices javaServ;
+	//private JavaEditorListener javaListener;
 	
 	public ConventionCheckerView() {
 		rules = new ConventionRules();
@@ -54,7 +55,8 @@ public class ConventionCheckerView implements PidescoView {
 	}
 	
 	/**
-	 * Create table and prepare all listeners. Also populate the initial table with the rules file.
+	 * Create table and prepare all listeners. 
+	 * Also populate the initial table with the rules file.
 	 * @param p_view
 	 */
 	public void createTable(Composite p_view) {
@@ -68,21 +70,25 @@ public class ConventionCheckerView implements PidescoView {
 		
 		//Create table and prepare cells
 		createTable(viewArea);
-		
 		createSaveButton(viewArea);
-		ServiceReference<JavaEditorServices> serviceReference2 = context.getServiceReference(JavaEditorServices.class);
-		JavaEditorServices javaServ = context.getService(serviceReference2);
-		File f = javaServ.getOpenedFile();
 		
+		ServiceReference<JavaEditorServices> serviceReference2 = context.getServiceReference(JavaEditorServices.class);
+		this.javaServ = context.getService(serviceReference2);
+		File f = this.javaServ.getOpenedFile();
+
 		ConventionVisitor checker = new ConventionVisitor(rules, javaServ);
 		Parser.parse(/*testView.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/TestExampleConventions.java"*/
-				javaServ.getOpenedFile(), checker);
+				this.javaServ.getOpenedFile(), checker);
 
 		
 		for(Log l: checker.getErrors()) {
-			javaServ.addAnnotation(f, AnnotationType.WARNING, l.getMessage(), l.getPosition()
+			this.javaServ.addAnnotation(f, AnnotationType.WARNING, l.getMessage(), l.getPosition()
 					, l.getValue().length());
-		}		
+		}
+		
+		/*ServiceReference<JavaEditorListener> serviceListenerReferene = context.getServiceReference(JavaEditorListener.class);
+		this.javaListener = context.getService(serviceListenerReferene);
+		this.javaListener.fileSaved(this.javaServ.getOpenedFile());*/
 		
 		/*Button button = new Button(viewArea, SWT.PUSH);
 		button.addSelectionListener(new SelectionAdapter() {

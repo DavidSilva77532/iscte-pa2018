@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: MyPlugin
 Bundle-SymbolicName: pt.iscte.pidesco.MyPlugin;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: pt.iscte.pidesco.ConventionChecker.Activator
+Bundle-Activator: pt.iscte.pidesco.conventionchecker.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: pt.iscte.pidesco.MyPlugin
 Import-Package: org.eclipse.jdt.core,

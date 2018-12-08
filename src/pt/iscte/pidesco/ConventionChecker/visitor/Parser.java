@@ -1,4 +1,4 @@
-package ASTVisitor;
+package pt.iscte.pidesco.conventionchecker.visitor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,13 +18,11 @@ public class Parser {
 	
 	/**
 	 * parse a file and validate all the convention rules applicable
-	 * @param filePath is the directory to the file that is going to be analyzed
+	 * @param file is the file that is going to be analyzed
 	 * @param visitor the class that is going to go through the syntax tree and apply the rules
 	 * @return AST parser
 	 */
-	public static void parse(/*String filePath*/ File file, ASTVisitor visitor) {
-		//assert filePath != null : "file cannot be null";
-		//File file = new File(filePath);
+	public static void parse(File file, ASTVisitor visitor) {
 		assert file.exists() && file.isFile();
 		
 		ASTParser parser = getParser(file);

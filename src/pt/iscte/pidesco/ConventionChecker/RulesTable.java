@@ -1,4 +1,4 @@
-package pt.iscte.pidesco.ConventionChecker;
+package pt.iscte.pidesco.conventionchecker;
 
 import java.util.Map;
 

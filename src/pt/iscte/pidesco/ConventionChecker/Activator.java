@@ -1,11 +1,14 @@
-package pt.iscte.pidesco.ConventionChecker;
+package pt.iscte.pidesco.conventionchecker;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+import pt.iscte.pidesco.conventionchecker.service.ConventionCheckerService;
+
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
+	private ConventionCheckerService service;
 
 	static BundleContext getContext() {
 		return context;
@@ -17,6 +20,9 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
+		service = new ConventionCheckerServiceImpl();
+		context.registerService(ConventionCheckerService.class, service, null);
+		
 	}
 
 	/*

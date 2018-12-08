@@ -1,9 +1,10 @@
-package pt.iscte.pidesco.conventionchecker.visitor;
+package pa.iscde.conventionchecker.visitor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.SortedSet;
 
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.compiler.IProblem;
@@ -13,6 +14,8 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import pt.iscte.pidesco.javaeditor.service.AnnotationType;
+import pt.iscte.pidesco.projectbrowser.model.PackageElement;
+import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 public class Parser {
 	
@@ -24,6 +27,9 @@ public class Parser {
 	 */
 	public static void parse(File file, ASTVisitor visitor) {
 		assert file.exists() && file.isFile();
+		
+		// Use absolute path to avoid confusing 2 files with the same name
+		((ConventionVisitor) visitor).setFileName(file.getAbsolutePath());
 		
 		ASTParser parser = getParser(file);
 		String src = readSource(file);
@@ -62,6 +68,19 @@ public class Parser {
 			e.printStackTrace();
 		}
 		return src.toString();
+	}
+	
+	public static void parseAll(SortedSet<SourceElement> files, ASTVisitor visitor) {
+		// Parse multiple files
+		for (SourceElement e : files) {
+			if (e.isPackage())
+				parseAll(((PackageElement) e).getChildren(), visitor);
+			else {
+				parse(e.getFile(), visitor);
+				//lst.addAll(new CommentExtractor(new FileToString(e.getFile()).parse(), e.getName(),
+				//		e.getFile().getAbsolutePath()).getCommentDetails());
+			}
+		}
 	}
 }
 

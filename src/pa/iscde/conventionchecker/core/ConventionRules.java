@@ -1,4 +1,4 @@
-package pt.iscte.pidesco.conventionchecker;
+package pa.iscde.conventionchecker.core;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+
+import pa.iscde.convetionchecker.view.ConventionCheckerView;
 
 
 public class ConventionRules {

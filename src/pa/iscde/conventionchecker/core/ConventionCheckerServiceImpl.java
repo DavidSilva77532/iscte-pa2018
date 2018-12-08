@@ -1,9 +1,9 @@
-package pt.iscte.pidesco.conventionchecker;
+package pa.iscde.conventionchecker.core;
 
 import java.util.ArrayList;
 
-import pt.iscte.pidesco.conventionchecker.service.ConventionCheckerService;
-import pt.iscte.pidesco.conventionchecker.visitor.Log;
+import pa.iscde.conventionchecker.service.ConventionCheckerService;
+import pa.iscde.conventionchecker.visitor.Log;
 
 public class ConventionCheckerServiceImpl implements ConventionCheckerService{
 	private ArrayList<Log> errors;

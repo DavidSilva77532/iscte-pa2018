@@ -1,8 +1,8 @@
-package pt.iscte.pidesco.conventionchecker.service;
+package pa.iscde.conventionchecker.service;
 
 import java.util.ArrayList;
 
-import pt.iscte.pidesco.conventionchecker.visitor.Log;
+import pa.iscde.conventionchecker.visitor.Log;
 
 public interface ConventionCheckerService {
 

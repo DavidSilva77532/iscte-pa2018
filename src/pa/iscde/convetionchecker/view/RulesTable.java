@@ -1,4 +1,4 @@
-package pt.iscte.pidesco.conventionchecker;
+package pa.iscde.convetionchecker.view;
 
 import java.util.Map;
 
@@ -15,6 +15,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+
+import pa.iscde.conventionchecker.core.ConventionRules;
 
 public class RulesTable {
 	private ConventionRules rules;

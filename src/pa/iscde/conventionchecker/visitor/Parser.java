@@ -7,13 +7,11 @@ import java.util.Scanner;
 import java.util.SortedSet;
 
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import pt.iscte.pidesco.javaeditor.service.AnnotationType;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
@@ -77,8 +75,6 @@ public class Parser {
 				parseAll(((PackageElement) e).getChildren(), visitor);
 			else {
 				parse(e.getFile(), visitor);
-				//lst.addAll(new CommentExtractor(new FileToString(e.getFile()).parse(), e.getName(),
-				//		e.getFile().getAbsolutePath()).getCommentDetails());
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package pa.iscde.convetionchecker.view;
+package pa.iscde.conventionchecker.view;
 
 import java.util.Map;
 

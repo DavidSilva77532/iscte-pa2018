@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import pa.iscde.convetionchecker.view.ConventionCheckerView;
+import pa.iscde.conventionchecker.view.ConventionCheckerView;
 
 
 public class ConventionRules {

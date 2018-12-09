@@ -7,7 +7,7 @@
          name="My View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.convetionchecker.view.ConventionCheckerView">
+            class="pa.iscde.conventionchecker.view.ConventionCheckerView">
       </view>
    </extension>
 

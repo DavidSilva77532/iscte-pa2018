@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="pt.iscte.pidesco.MyPlugin" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="pa.iscde.conventionchecker" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pt.iscte.pidesco.MyPlugin" id="pa.iscde.conventionchecker.extension" name="ConventionCheckerExt"/>
+         <meta.schema plugin="pa.iscde.conventionchecker" id="pa.iscde.conventionchecker.extension" name="ConventionCheckerExt"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]

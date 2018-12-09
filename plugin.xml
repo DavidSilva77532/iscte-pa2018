@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="checkerExt" name="ConcentionCheckerExt" schema="schema/extension.exsd"/>
+   <extension-point id="ConventionCheckerExtension" name="ConventionCheckerExtension" schema="schema/ConcentionCheckerExtension.exsd"/>
    <extension
-         id="helloWorld"
-         name="My View"
+         id="conventionchecker"
+         name="conventionchecker"
          point="pt.iscte.pidesco.view">
       <view
             class="pa.iscde.conventionchecker.view.ConventionCheckerView">

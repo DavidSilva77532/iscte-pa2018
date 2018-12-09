@@ -138,7 +138,7 @@ public class ConventionCheckerView implements PidescoView {
 	 */
 	private void triggerExtensions(Composite viewArea) {
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		IConfigurationElement[] elements = reg.getConfigurationElementsFor("pt.iscte.pidesco.MyPlugin.checkerExt");
+		IConfigurationElement[] elements = reg.getConfigurationElementsFor("pa.iscde.conventionchecker.ConventionCheckerExtension");
 		for(IConfigurationElement e : elements) {
 			try {
 				ConventionCheckerExt action = (ConventionCheckerExt) e.createExecutableExtension("class");

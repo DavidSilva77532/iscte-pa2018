@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="pt.iscte.pidesco.MyPlugin" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="pa.iscde.conventionchecker" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pt.iscte.pidesco.MyPlugin" id="checkerExt" name="ConcentionCheckerExt"/>
+         <meta.schema plugin="pa.iscde.conventionchecker" id="ConcentionCheckerExtension" name="ConcentionCheckerExtension"/>
       </appinfo>
       <documentation>
          This Extension allows another component to change its view (Adding buttons, tables, labels, ..) using the view provided, or change the current rules through the rule map provided.
@@ -18,6 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
+            <element ref="ConventionCheckerExtension"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -46,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="checkerExt">
+   <element name="ConventionCheckerExtension">
       <complexType>
          <attribute name="name" type="string" use="required">
             <annotation>
@@ -61,7 +62,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":pa.iscde.conventionchecker.ext.ConventionCheckerExtension"/>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.conventionchecker.ext.ConventionCheckerExt"/>
                </appinfo>
             </annotation>
          </attribute>

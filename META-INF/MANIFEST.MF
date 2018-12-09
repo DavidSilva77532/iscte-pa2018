@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: MyPlugin
-Bundle-SymbolicName: pt.iscte.pidesco.MyPlugin;singleton:=true
+Bundle-Name: ConventionChecker
+Bundle-SymbolicName: pa.iscde.conventionchecker;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: pa.iscde.conventionchecker.core.ConventionActivator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Automatic-Module-Name: pt.iscte.pidesco.MyPlugin
+Automatic-Module-Name: pa.iscde.conventionchecker
 Import-Package: org.eclipse.jdt.core,
  org.eclipse.jdt.core.compiler,
  org.eclipse.jdt.core.dom,

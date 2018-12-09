@@ -134,7 +134,7 @@ public class ConventionVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(FieldDeclaration node) {
 
-		for(Object o : node.fragments()) {
+		/*for(Object o : node.fragments()) {
 			VariableDeclarationFragment var = (VariableDeclarationFragment) o;
 			String name = var.getName().toString();
 			boolean isFinal = Modifier.isFinal(node.getModifiers());
@@ -144,26 +144,45 @@ public class ConventionVisitor extends ASTVisitor {
 			else
 				myErrors.validateRule(name.toString(), rules.getRules().get("Variable"), var.getStartPosition(), sourceLine(var), this.fileName);
 
-		}
+		}*/
 		return true;
 	}
 	
 			
 
 	/**
-	 * visits variable declarations inside functions (all variables in fact)
-	 * We still need the other node validation to access the modifiers of constants
+	 * visits variable declarations
+	 *It tries to check if there are any modifiers to check if it's a constant
 	 * 
 	 * @param node
 	 * @return
 	 */
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
-		SimpleName var = node.getName();
-		String name = var.toString();
-				
-		myErrors.validateRule(name.toString(), rules.getRules().get("Variable"), var.getStartPosition(), sourceLine(var), this.fileName);
-				
+		try {		
+			FieldDeclaration parentNode = (FieldDeclaration) node.getParent();
+			
+			for(Object o : parentNode.fragments()) {
+				// Decide which rule to apply, depending on if it's a constant or not
+				VariableDeclarationFragment var = (VariableDeclarationFragment) o;
+				String name = var.getName().toString();
+							
+				boolean isFinal = Modifier.isFinal(parentNode.getModifiers());
+	
+				if (isFinal)
+					myErrors.validateRule(name.toString(), rules.getRules().get("Constant"), var.getStartPosition(), sourceLine(var), this.fileName);
+				else
+					myErrors.validateRule(name.toString(), rules.getRules().get("Variable"), var.getStartPosition(), sourceLine(var), this.fileName);
+	
+			}
+		} catch (Exception e){
+			// If something went wrong, then this field has no modifiers and we should process it normally as a variable
+			SimpleName var = node.getName();
+			String name = var.toString();
+
+			myErrors.validateRule(name.toString(), rules.getRules().get("Variable"), var.getStartPosition(), sourceLine(var), this.fileName);
+
+		}
 		return true;
 	}
 

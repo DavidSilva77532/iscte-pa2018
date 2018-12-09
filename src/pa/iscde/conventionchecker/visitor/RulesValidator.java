@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import pa.iscde.conventionchecker.ext.LogExt;
+import pa.iscde.conventionchecker.service.LogExt;
 
 public class RulesValidator {
 	private ArrayList<LogExt> stack = new ArrayList<>();
@@ -20,6 +20,10 @@ public class RulesValidator {
 	 * @param p_fileName filename of the processed file
 	 */
 	public void validateRule(String p_input, String p_regex, int p_offset, int p_line, String p_fileName) {
+		// If there is no rule to validate, the validation is OK
+		if (p_regex == null || p_regex.isEmpty())
+			return;
+		
 		Pattern p = Pattern.compile("^" + p_regex + "$"); // we need the ^ and $ to match the beginning and end of the string
 		Matcher m = p.matcher(p_input);
 

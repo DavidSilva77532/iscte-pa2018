@@ -1,6 +1,6 @@
 package pa.iscde.conventionchecker.visitor;
 
-import pa.iscde.conventionchecker.ext.LogExt;
+import pa.iscde.conventionchecker.service.LogExt;
 
 public class Log implements LogExt {
 	private String value;

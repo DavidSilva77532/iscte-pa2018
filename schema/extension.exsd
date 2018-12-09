@@ -6,7 +6,7 @@
          <meta.schema plugin="pt.iscte.pidesco.MyPlugin" id="checkerExt" name="ConcentionCheckerExt"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This Extension allows another component to change its view (Adding buttons, tables, labels, ..) using the view provided, or change the current rules through the rule map provided.
       </documentation>
    </annotation>
 
@@ -82,7 +82,7 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         For examples please go to ...
       </documentation>
    </annotation>
 
@@ -91,7 +91,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         For more information please go to ...
       </documentation>
    </annotation>
 

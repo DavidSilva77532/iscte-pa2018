@@ -15,30 +15,23 @@ import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.BundleContext;
 
 import pa.iscde.conventionchecker.core.ConventionActivator;
-import pa.iscde.conventionchecker.core.ConventionRules;
+import pa.iscde.conventionchecker.core.ConventionCheckerServiceImpl;
 import pa.iscde.conventionchecker.ext.ConventionCheckerExt;
-import pa.iscde.conventionchecker.ext.LogExt;
-import pa.iscde.conventionchecker.visitor.ConventionVisitor;
 import pa.iscde.conventionchecker.visitor.Parser;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.javaeditor.service.AnnotationType;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
-import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class ConventionCheckerView implements PidescoView {
-	private ConventionRules rules;
 	private RulesTable conventionTable;
-	private JavaEditorServices javaServ;
-	private ConventionVisitor checker;
+	private ConventionCheckerServiceImpl conventionService;
 	
 	public ConventionCheckerView() {
-		rules = new ConventionRules();
-		this.javaServ = ConventionActivator.getInstance().getJavaEditorService();
-		this.checker = new ConventionVisitor(rules, javaServ);
+		this.conventionService = (ConventionCheckerServiceImpl) ConventionActivator.getInstance().getConventionService();
+		this.conventionService.setJavaEditor(ConventionActivator.getInstance().getJavaEditorService());
 	}
 	
 	
@@ -55,13 +48,11 @@ public class ConventionCheckerView implements PidescoView {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				rules.saveFile();
+				conventionService.getRuleManager().saveFile();
 			}
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 	}
@@ -79,30 +70,15 @@ public class ConventionCheckerView implements PidescoView {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				checker.resetStack();
-				Parser.parseAll(ConventionActivator.getJavaBrowserService().getRootPackage().getChildren(), checker);
-				annotateCurrentFile();
+				conventionService.resetStack();
+				Parser.parseAll(ConventionActivator.getJavaBrowserService().getRootPackage().getChildren(), conventionService.getVisitor());
+				conventionService.annotateCurrentFile();
 			}
 			
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void widgetDefaultSelected(SelectionEvent e) {				
 			}
 		});
-	}
-	
-	/**
-	 * Adds annotations to the current opened file
-	 */
-	private void annotateCurrentFile() {
-		File f = javaServ.getOpenedFile();
-		
-		if (f != null)
-			for(LogExt l: checker.getErrors(javaServ.getOpenedFile().getAbsolutePath())) {
-				javaServ.addAnnotation(javaServ.getOpenedFile(), AnnotationType.WARNING, l.getMessage(), l.getPosition()
-						, l.getValue().length());
-			}
 	}
 	
 	/**
@@ -112,7 +88,7 @@ public class ConventionCheckerView implements PidescoView {
 	 * @param p_view
 	 */
 	public void createTable(Composite p_view) {
-		conventionTable = new RulesTable(rules, p_view);
+		conventionTable = new RulesTable(conventionService.getRuleManager(), p_view);
 	}
 	
 	/**
@@ -130,31 +106,29 @@ public class ConventionCheckerView implements PidescoView {
 		createSaveButton(viewArea, imageMap);
 		createRefreshButton(viewArea, imageMap);
 		
-		Parser.parseAll(ConventionActivator.getJavaBrowserService().getRootPackage().getChildren(), checker);
-
+		Parser.parseAll(ConventionActivator.getJavaBrowserService().getRootPackage().getChildren(), conventionService.getVisitor());
+		conventionService.annotateCurrentFile();
+				
 		JavaEditorListener listener = new JavaEditorListener.Adapter() {
 			@Override
 			public void fileSaved(File file) {
-				checker.resetStack(file.getAbsolutePath());
-				Parser.parse(file, checker);
-				//annotateCurrentFile(); TODO
+				conventionService.resetStack(file.getAbsolutePath());
+				Parser.parse(file, conventionService.getVisitor());
+				conventionService.annotateCurrentFile();
 			}
 			
 			@Override
 			public void fileOpened(File file) {
-				checker.resetStack(file.getAbsolutePath());
-				Parser.parse(file, checker);
-				//annotateCurrentFile(); TODO
+				// falar com o prof que isto é chamado N vezes
+				//System.out.println("aqui");
+				//conventionService.resetStack(file.getAbsolutePath());
+				//Parser.parse(file, conventionService.getVisitor());
+				//conventionService.annotateCurrentFile();
 			}
 		};
 		
-		this.javaServ.addListener(listener);
-		
-		
-		triggerExtensions(viewArea);
-		
-		
-		
+		ConventionActivator.getInstance().getJavaEditorService().addListener(listener);
+		triggerExtensions(viewArea);	
 	}
 	
 	/**
@@ -168,9 +142,10 @@ public class ConventionCheckerView implements PidescoView {
 		for(IConfigurationElement e : elements) {
 			try {
 				ConventionCheckerExt action = (ConventionCheckerExt) e.createExecutableExtension("class");
-				action.changeView(viewArea, rules.getRules()); // allows to change the checker view and gives the rules
-				action.getErrors(checker.getErrors()); // gives the convention errors
+				action.changeView(viewArea, conventionService.getRuleManager().getRules()); // allows to change the checker view and gives the rules
+				//action.getErrors(conventionService.getConventionErrors()); // gives the convention errors
 				viewArea.layout();
+				conventionTable.refreshTable();
 			} catch (CoreException e1) {
 				e1.printStackTrace();
 			}

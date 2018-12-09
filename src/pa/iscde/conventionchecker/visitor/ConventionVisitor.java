@@ -15,7 +15,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import pa.iscde.conventionchecker.core.ConventionRules;
-import pa.iscde.conventionchecker.ext.LogExt;
+import pa.iscde.conventionchecker.service.LogExt;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class ConventionVisitor extends ASTVisitor {
@@ -24,7 +24,7 @@ public class ConventionVisitor extends ASTVisitor {
 	private ConventionRules rules;
 	private String fileName;
 	
-	public ConventionVisitor(ConventionRules p_rules, JavaEditorServices p_serv) {
+	public ConventionVisitor(ConventionRules p_rules) {
 		this.rules = p_rules;
 	}
 	

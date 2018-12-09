@@ -1,3 +1,4 @@
+Variable=v_[a-z]+
 Constant=[A-Z]+
 Parameter=p_.*
 Class=COISAS_.*

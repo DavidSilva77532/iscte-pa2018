@@ -1,4 +1,4 @@
-package pa.iscde.conventionchecker.ext;
+package pa.iscde.conventionchecker.service;
 
 public interface LogExt {
 	

@@ -13,7 +13,7 @@ public class ConventionActivator implements BundleActivator {
 	private static ConventionActivator instance;
 	
 	private static BundleContext context;
-	private ConventionCheckerService conventionService;
+	private static ConventionCheckerService conventionService;
 	private static JavaEditorServices editorServices;
 	private static ProjectBrowserServices browserServices;
 
@@ -40,7 +40,7 @@ public class ConventionActivator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 		instance = this;
 		ConventionActivator.context = bundleContext;
-		registerConvetionService();
+		registerConventionService();
 		initJavaEditorService();
 		initJavaBrowserService();
 		
@@ -71,12 +71,15 @@ public class ConventionActivator implements BundleActivator {
 	}
 	
 	/**
-	 * Registers my convention service - Do I need this? Or should I use the extension points only?
+	 * Registers my convention service
 	 */
-	private void registerConvetionService () {
+	private void registerConventionService () {
 		conventionService = new ConventionCheckerServiceImpl();
-		context.registerService(ConventionCheckerService.class, conventionService, null);
-				
+		context.registerService(ConventionCheckerService.class, conventionService, null);		
+	}
+	
+	public static ConventionCheckerService getConventionService() {
+		return conventionService;
 	}
 	
 	/**

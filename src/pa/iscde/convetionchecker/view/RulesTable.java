@@ -21,7 +21,12 @@ import pa.iscde.conventionchecker.core.ConventionRules;
 public class RulesTable {
 	private ConventionRules rules;
 	private Composite view;
+	private Table table;
 	private static String[] HEADER = { "Type", "Regex" };
+	private static int HEADER_WIDTH = 100;
+	private static int COLUMN_WIDTH = 50;
+	private static int TABLE_HEIGHT = 200;
+
 	
 	public RulesTable (ConventionRules p_rules,
 					Composite p_view) {
@@ -40,7 +45,7 @@ public class RulesTable {
         for (int i = 0; i < HEADER.length; i++) {
             TableColumn column = new TableColumn(table, SWT.NONE);
             column.setText(HEADER[i]);
-            table.getColumn(i).setWidth(100);
+            table.getColumn(i).setWidth(HEADER_WIDTH);
         }
 	}
 	
@@ -71,7 +76,7 @@ public class RulesTable {
         final TableEditor editor = new TableEditor(table);
         editor.horizontalAlignment = SWT.LEFT;
         editor.grabHorizontal = true;
-        editor.minimumWidth = 50;
+        editor.minimumWidth = COLUMN_WIDTH;
         
         // only the second should be editable (the rule)
         final int EDITABLECOLUMN = 1;
@@ -80,9 +85,9 @@ public class RulesTable {
           
         	public void widgetSelected(SelectionEvent e) {
 
-            Control oldEditor = editor.getEditor();
-            if (oldEditor != null)
-              oldEditor.dispose();
+            Control old = editor.getEditor();
+            if (old != null)
+              old.dispose();
 
             TableItem item = (TableItem) e.item;
             if (item == null)
@@ -115,17 +120,28 @@ public class RulesTable {
 	public void createTable() {
 		
 		// Set grid layouts and global table definitions
-		Table table = new Table(view, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		table = new Table(view, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
         table.setLinesVisible(false);
         table.setHeaderVisible(true);
         GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
-        data.heightHint = 200;
+        data.heightHint = TABLE_HEIGHT;
         view.setLayoutData(data);
         
         // Create and populate the cells
         createHeader(table);
         updateCellsByFile(table);
-        createEditCells(table);   
+        createEditCells(table); 
+	}
+	
+	/**
+	 * Refresh table values if they are overridden.
+	 * Used by our extension point.
+	 * 
+	 */
+	public void refreshTable() {
+		for (TableItem item : table.getItems()) {
+			item.setText (1, rules.getRules().get(item.getText()));
+		}
 	}
 	
 }

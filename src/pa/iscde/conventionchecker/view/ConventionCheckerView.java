@@ -11,6 +11,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.BundleContext;
 
@@ -54,6 +55,20 @@ public class ConventionCheckerView implements PidescoView {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
+	}
+	
+	/**
+	 * Create a combo box for the profiles
+	 * 
+	 * @param viewArea 
+	 */
+	private void createComboBox(Composite viewArea) {
+		// Create a dropdown Combo & Read only
+		Combo combo = new Combo(viewArea, SWT.DROP_DOWN | SWT.READ_ONLY);
+		 
+		String[] items = conventionService.getProfiles();
+
+		combo.setItems(items);
 	}
 	
 	/**
@@ -104,6 +119,7 @@ public class ConventionCheckerView implements PidescoView {
 		createTable(viewArea);
 		createSaveButton(viewArea, imageMap);
 		createRefreshButton(viewArea, imageMap);
+		createComboBox(viewArea);
 		
 		Parser.parseAll(ConventionActivator.getJavaBrowserService().getRootPackage().getChildren(), conventionService.getVisitor());
 		conventionService.annotateCurrentFile();

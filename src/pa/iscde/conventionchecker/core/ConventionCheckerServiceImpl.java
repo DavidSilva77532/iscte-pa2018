@@ -40,6 +40,15 @@ public class ConventionCheckerServiceImpl implements ConventionCheckerService{
 	}
 	
 	/**
+	 * get a list of all profiles
+	 * 
+	 * @return a list of profiles
+	 */
+	public String[] getProfiles() {
+		return rules.getProfiles();
+	}
+	
+	/**
 	 * Set the java editor service
 	 * 
 	 */

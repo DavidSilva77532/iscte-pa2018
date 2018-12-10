@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,9 +17,9 @@ import pa.iscde.conventionchecker.view.ConventionCheckerView;
 
 public class ConventionRules {
 	private Map<String, String> rules;
-	private final String FOLDERLOCATION = ConventionCheckerView.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/rules/";
+	private final String FOLDERLOCATION = ConventionCheckerView.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/rules";
 	private String currentProfile = "default";
-	private String fileLocation = FOLDERLOCATION + currentProfile + ".file";
+	private String fileLocation = FOLDERLOCATION + "/" + currentProfile + ".file";
 
 	/**
 	 * Creates the rule object reading the default rules from the existing file
@@ -72,7 +73,7 @@ public class ConventionRules {
 	
 	public void createNewFile(String p_profileName, Map<String, String> p_rules) {
 		try {
-			BufferedWriter	writer = new BufferedWriter(new FileWriter(FOLDERLOCATION + p_profileName + ".file"));
+			BufferedWriter	writer = new BufferedWriter(new FileWriter(FOLDERLOCATION + "/" + p_profileName + ".file"));
 			writer.write(""); // force create file if not exists
 			try {
 				 for(String key : p_rules.keySet()) {
@@ -117,12 +118,36 @@ public class ConventionRules {
 	 * @param p_profileName
 	 */
 	public boolean profileExists(String p_profileName) {
-		File f = new File(FOLDERLOCATION + p_profileName + ".file");
+		File f = new File(FOLDERLOCATION + "/" + p_profileName + ".file");
 		if(f.exists() && !f.isDirectory()) { 
 		   return true;
 		}
 
 		return false;
+	}
+	
+	/**
+	 * Get all profiles for the combo box
+	 * @return an array of profiles
+	 */
+	public String[] getProfiles() {
+		String[] ret;
+		ArrayList<String> list = new ArrayList();
+		File folder = new File(FOLDERLOCATION);
+		 for (File f : folder.listFiles()) {
+		        if (!f.isDirectory()) {
+		            list.add(f.getName().replaceFirst("[.][^.]+$", ""));
+		        }
+		    }
+		 
+		 ret = new String[list.size()];
+		 
+		 for(int i=0;i<ret.length;i++)
+		    {  
+		        ret[i] = list.get(i);  
+		    }  
+		 
+		 return ret;
 	}
 	
 	/**

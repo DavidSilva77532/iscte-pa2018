@@ -1,9 +1,9 @@
 package pa.iscde.conventionchecker.view;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
@@ -16,7 +16,6 @@ import org.osgi.framework.BundleContext;
 
 import pa.iscde.conventionchecker.core.ConventionActivator;
 import pa.iscde.conventionchecker.core.ConventionCheckerServiceImpl;
-import pa.iscde.conventionchecker.ext.ConventionCheckerExt;
 import pa.iscde.conventionchecker.visitor.Parser;
 
 import org.eclipse.swt.events.SelectionEvent;
@@ -137,16 +136,22 @@ public class ConventionCheckerView implements PidescoView {
 	private void triggerExtensions(Composite viewArea) {
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		IConfigurationElement[] elements = reg.getConfigurationElementsFor("pa.iscde.conventionchecker.ConventionCheckerExtension");
+
 		for(IConfigurationElement e : elements) {
-			try {
-				ConventionCheckerExt action = (ConventionCheckerExt) e.createExecutableExtension("class");
-				action.changeView(viewArea, conventionService.getRuleManager().getRules()); // allows to change the checker view and gives the rules
-				//action.getErrors(conventionService.getConventionErrors()); // gives the convention errors
-				viewArea.layout();
-				conventionTable.refreshTable();
-			} catch (CoreException e1) {
-				e1.printStackTrace();
+			Map<String, String> rows = new HashMap();
+			String profileName = e.getAttribute("profileName");
+			rows.put("Variable", e.getAttribute("variable"));
+			rows.put("Constant", e.getAttribute("constant"));
+			rows.put("Class", e.getAttribute("class"));
+			rows.put("Method", e.getAttribute("method"));
+			rows.put("Interface", e.getAttribute("interface"));
+			rows.put("Parameter", e.getAttribute("parameter"));
+			
+			// I don't want to override the same profiles that were loaded (and possibly changed) before
+			if (!conventionService.getRuleManager().profileExists(profileName)) {
+				conventionService.addNewProfile(profileName, rows);
 			}
+
 		}
 	}
 

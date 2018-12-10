@@ -2,6 +2,7 @@ package pa.iscde.conventionchecker.core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 import pa.iscde.conventionchecker.service.ConventionCheckerService;
 import pa.iscde.conventionchecker.service.LogExt;
@@ -17,6 +18,25 @@ public class ConventionCheckerServiceImpl implements ConventionCheckerService{
 	public ConventionCheckerServiceImpl () {
 		rules = new ConventionRules();
 		this.checker = new ConventionVisitor(rules);
+	}
+	
+	/**
+	 * changes profile
+	 * 
+	 * @param p_profileName
+	 */
+	public void changeProfile(String p_profileName) {
+		rules.changeProfile(p_profileName);
+	}
+	
+	/**
+	 * create a new file for the new profile
+	 * 
+	 * @param p_profileName
+	 * @param p_rules
+	 */
+	public void addNewProfile(String p_profileName, Map<String, String> p_rules) {
+		rules.createNewFile(p_profileName, p_rules);
 	}
 	
 	/**

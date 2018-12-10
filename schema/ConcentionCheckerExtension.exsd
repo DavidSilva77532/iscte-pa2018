@@ -3,7 +3,7 @@
 <schema targetNamespace="pa.iscde.conventionchecker" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pa.iscde.conventionchecker" id="ConcentionCheckerExtension" name="ConcentionCheckerExtension"/>
+         <meta.schema plugin="pa.iscde.conventionchecker" id="ConventionCheckerExtension" name="ConventionCheckerExtension"/>
       </appinfo>
       <documentation>
          This Extension allows another component to change its view (Adding buttons, tables, labels, ..) using the view provided, or change the current rules through the rule map provided.
@@ -49,21 +49,53 @@
 
    <element name="ConventionCheckerExtension">
       <complexType>
-         <attribute name="name" type="string" use="required">
+         <attribute name="profileName" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="class" type="string" use="required">
+         <attribute name="variable" type="string">
             <annotation>
                <documentation>
                   
                </documentation>
-               <appinfo>
-                  <meta.attribute kind="java" basedOn=":pa.iscde.conventionchecker.ext.ConventionCheckerExt"/>
-               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="constant" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="method" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="interface" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="parameter" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

@@ -3,4 +3,4 @@ Constant=[A-Z]+
 Parameter=p_.*
 Class=COISAS_.*
 Method=CENAS_.*
-Interface=i_.*_done
+Interface=i_.*

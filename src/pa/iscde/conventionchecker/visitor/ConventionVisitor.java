@@ -29,6 +29,15 @@ public class ConventionVisitor extends ASTVisitor {
 	}
 	
 	/**
+	 * Sets the rules that are currently being used (due to multiple profiles)
+	 * 
+	 * @param p_rules 
+	 */
+	public void setRules(ConventionRules p_rules) {
+		this.rules = p_rules;
+	}
+	
+	/**
 	 * Sets the filename (Path) for the next file to be analyzed
 	 * 
 	 * @param p_fileName the file path of the file for which we are going to analyze

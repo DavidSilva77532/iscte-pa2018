@@ -27,8 +27,4 @@ public interface ConventionCheckerExt {
 	 */
 	public void changeView(Composite area, Map<String, String> rules);
 	
-	/**
-	 * Faz sentido ser ponto de extensao? I guess not
-	 */
-	//public void getErrors(ArrayList<LogExt> errors);
 }

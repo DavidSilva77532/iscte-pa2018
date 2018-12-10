@@ -73,6 +73,17 @@ public class ConventionCheckerServiceImpl implements ConventionCheckerService{
 						, l.getValue().length());
 			}
 	}
+	
+	/**
+	 * Adds annotations to the passed in file
+	 */
+	public void annotateCurrentFile(File f) {
+		if (f != null)
+			for(LogExt l: getFileConventionErrors(f.getAbsolutePath())) {
+				javaServ.addAnnotation(f, AnnotationType.WARNING, l.getMessage(), l.getPosition()
+						, l.getValue().length());
+			}
+	}
 
 	/**
 	 * Gets all convention errors

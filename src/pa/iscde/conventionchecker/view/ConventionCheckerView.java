@@ -119,16 +119,14 @@ public class ConventionCheckerView implements PidescoView {
 			
 			@Override
 			public void fileOpened(File file) {
-				// falar com o prof que isto é chamado N vezes
-				//System.out.println("aqui");
-				//conventionService.resetStack(file.getAbsolutePath());
-				//Parser.parse(file, conventionService.getVisitor());
-				//conventionService.annotateCurrentFile();
+				conventionService.resetStack(file.getAbsolutePath());
+				Parser.parse(file, conventionService.getVisitor());
+				conventionService.annotateCurrentFile(file);
 			}
 		};
 		
 		ConventionActivator.getInstance().getJavaEditorService().addListener(listener);
-		triggerExtensions(viewArea);	
+		triggerExtensions(viewArea);
 	}
 	
 	/**

@@ -6,7 +6,7 @@
          <meta.schema plugin="pa.iscde.conventionchecker" id="ConventionCheckerExtension" name="ConventionCheckerExtension"/>
       </appinfo>
       <documentation>
-         This Extension allows another component to change its view (Adding buttons, tables, labels, ..) using the view provided, or change the current rules through the rule map provided.
+         This Extension allows another component to create its own profile of convention rules.
       </documentation>
    </annotation>
 

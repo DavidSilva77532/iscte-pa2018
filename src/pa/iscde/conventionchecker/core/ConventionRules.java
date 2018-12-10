@@ -36,8 +36,11 @@ public class ConventionRules {
 	 * @param p_profileName
 	 */
 	public void changeProfile(String p_profileName) {
-		currentProfile = p_profileName;
-		readRulesFile(); 
+		if (!currentProfile.equals(p_profileName)) {
+			currentProfile = p_profileName;
+			fileLocation = FOLDERLOCATION + "/" + currentProfile + ".file";
+			readRulesFile(); 
+		}
 	}
 	
 	/**
@@ -158,13 +161,21 @@ public class ConventionRules {
 		try {
 			// Read file and populate our map
 			Scanner scanner = new Scanner(new File(fileLocation));
+			String regex = "";
+			
 			while(scanner.hasNextLine()) {
 				String[] ruleFile = scanner.nextLine().trim().split("\\s*=\\s*");
-				rules.put(ruleFile[0], ruleFile[1]);
+				
+				regex = ""; // to avoid nulls in the file
+				if(ruleFile.length>1)
+					regex = ruleFile[1];
+				
+				rules.put(ruleFile[0], regex);
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+
 	}
 }

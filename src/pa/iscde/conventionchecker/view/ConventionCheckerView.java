@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.osgi.framework.BundleContext;
 
 import pa.iscde.conventionchecker.core.ConventionActivator;
@@ -63,12 +64,33 @@ public class ConventionCheckerView implements PidescoView {
 	 * @param viewArea 
 	 */
 	private void createComboBox(Composite viewArea) {
+		// Label
+        Label label = new Label(viewArea, SWT.NONE);
+        label.setText("Select profile:"); 
+        
 		// Create a dropdown Combo & Read only
 		Combo combo = new Combo(viewArea, SWT.DROP_DOWN | SWT.READ_ONLY);
-		 
 		String[] items = conventionService.getProfiles();
-
 		combo.setItems(items);
+		combo.select(0);
+		
+		 // User select a item in the Combo.
+        combo.addSelectionListener(new SelectionListener() {
+ 
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                int idx = combo.getSelectionIndex();
+                String profile = combo.getItem(idx);
+                conventionService.changeProfile(profile);
+                conventionTable.refreshTable();
+            }
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+        });
 	}
 	
 	/**

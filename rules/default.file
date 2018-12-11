@@ -1,6 +1,6 @@
-Variable=v_[a-z]+
+Variable=v_[a-z][a-zA-z]+
 Constant=[A-Z]+
 Parameter=p_.*
-Class=COISAS_.*
-Method=CENAS_.*
+Class=c_.*
+Method=m_.*
 Interface=i_.*

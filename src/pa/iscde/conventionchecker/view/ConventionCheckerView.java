@@ -9,17 +9,25 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.osgi.framework.BundleContext;
 
 import pa.iscde.conventionchecker.core.ConventionActivator;
 import pa.iscde.conventionchecker.core.ConventionCheckerServiceImpl;
 import pa.iscde.conventionchecker.visitor.Parser;
 
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
@@ -42,14 +50,15 @@ public class ConventionCheckerView implements PidescoView {
 	 * @param viewArea 
 	 * @param imageMap
 	 */
-	private void createSaveButton(Composite viewArea, Map<String, Image> imageMap) {
-		Button button = new Button(viewArea, SWT.PUSH);
+	private void createSaveButton(ToolBar viewArea, Map<String, Image> imageMap) {
+		ToolItem button = new ToolItem(viewArea, SWT.PUSH);
 		button.setImage(imageMap.get("Save.png"));
 		button.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				conventionService.getRuleManager().saveFile();
+				conventionTable.hideEditor();
 			}
 			
 			@Override
@@ -63,16 +72,22 @@ public class ConventionCheckerView implements PidescoView {
 	 * 
 	 * @param viewArea 
 	 */
-	private void createComboBox(Composite viewArea) {
+	private void createComboBox(ToolBar viewArea) {
 		// Label
-        Label label = new Label(viewArea, SWT.NONE);
-        label.setText("Select profile:"); 
+		ToolItem label = new ToolItem(viewArea, SWT.READ_ONLY);
+        label.setText("Profile:");
+        label.setEnabled(false);
         
-		// Create a dropdown Combo & Read only
+	    ToolItem comboTool = new ToolItem(viewArea, SWT.SEPARATOR);
+
 		Combo combo = new Combo(viewArea, SWT.DROP_DOWN | SWT.READ_ONLY);
 		String[] items = conventionService.getProfiles();
 		combo.setItems(items);
 		combo.select(0);
+		
+		combo.pack();
+		comboTool.setWidth(combo.getSize().x);
+		comboTool.setControl(combo);
 		
 		 // User select a item in the Combo.
         combo.addSelectionListener(new SelectionListener() {
@@ -83,6 +98,7 @@ public class ConventionCheckerView implements PidescoView {
                 String profile = combo.getItem(idx);
                 conventionService.changeProfile(profile);
                 conventionTable.refreshTable();
+                conventionTable.hideEditor();
             }
 
 			@Override
@@ -99,8 +115,8 @@ public class ConventionCheckerView implements PidescoView {
 	 * @param viewArea 
 	 * @param imageMap
 	 */
-	private void createRefreshButton(Composite viewArea, Map<String, Image> imageMap) {
-		Button button = new Button(viewArea, SWT.PUSH);
+	private void createRefreshButton(ToolBar viewArea, Map<String, Image> imageMap) {
+		ToolItem button = new ToolItem(viewArea, SWT.PUSH);
 		button.setImage(imageMap.get("refresh.gif"));
 		button.addSelectionListener(new SelectionListener() {
 			
@@ -109,6 +125,7 @@ public class ConventionCheckerView implements PidescoView {
 				conventionService.resetStack();
 				Parser.parseAll(ConventionActivator.getJavaBrowserService().getRootPackage().getChildren(), conventionService.getVisitor());
 				conventionService.annotateCurrentFile();
+				conventionTable.hideEditor();
 			}
 			
 			@Override
@@ -135,13 +152,22 @@ public class ConventionCheckerView implements PidescoView {
 	 */
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-		viewArea.setLayout(new RowLayout(SWT.HORIZONTAL));
+		// Avoid components being separated
+		GridLayout gridLayout = new GridLayout();
+        gridLayout.numColumns = 1;
+		viewArea.setLayout(gridLayout);
 		BundleContext context = ConventionActivator.getContext();
 		
+		// Tool bar are used to stick 2 components together
+		ToolBar buttonToolbar = new ToolBar(viewArea, SWT.NONE);
+		createSaveButton(buttonToolbar, imageMap);
+		createRefreshButton(buttonToolbar, imageMap);
+		
 		createTable(viewArea);
-		createSaveButton(viewArea, imageMap);
-		createRefreshButton(viewArea, imageMap);
-		createComboBox(viewArea);
+		
+		ToolBar comboToolbar = new ToolBar(viewArea, SWT.NONE);
+		createComboBox(comboToolbar);
+		
 		
 		Parser.parseAll(ConventionActivator.getJavaBrowserService().getRootPackage().getChildren(), conventionService.getVisitor());
 		conventionService.annotateCurrentFile();

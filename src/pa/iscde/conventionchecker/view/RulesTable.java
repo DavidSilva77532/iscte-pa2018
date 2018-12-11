@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,6 +28,7 @@ public class RulesTable {
 	private static int HEADER_WIDTH = 100;
 	private static int COLUMN_WIDTH = 50;
 	private static int TABLE_HEIGHT = 200;
+	private TableEditor editor;
 
 	
 	public RulesTable (ConventionRules p_rules,
@@ -59,7 +62,7 @@ public class RulesTable {
 		
 		// Populate the cells with our rules loaded previously from the file
         for ( String key : myRules.keySet() ) {
-        	TableItem item = new TableItem(table, SWT.NONE);
+        	TableItem item = new TableItem(table, SWT.NONE);        	
             item.setText (0, key);
             item.setText (1, myRules.get(key));
         }
@@ -73,10 +76,10 @@ public class RulesTable {
 	 */
 	private void createEditCells(Table table) {
 		//create editable cells
-        final TableEditor editor = new TableEditor(table);
+        editor = new TableEditor(table);
         editor.horizontalAlignment = SWT.LEFT;
         editor.grabHorizontal = true;
-        editor.minimumWidth = COLUMN_WIDTH;
+        editor.minimumWidth = COLUMN_WIDTH; 
         
         // only the second should be editable (the rule)
         final int EDITABLECOLUMN = 1;
@@ -104,12 +107,18 @@ public class RulesTable {
             		rules.updateRule(item.getText(0), item.getText(1));
             	}
             });
-           
-            newEditor.selectAll();
-            newEditor.setFocus();
+                       
+            //newEditor.selectAll();
+            //newEditor.setFocus();
             editor.setEditor(newEditor, item, EDITABLECOLUMN);
+            
           }
         });
+	}
+	
+	public void hideEditor() {
+		if (editor.getEditor() !=null )
+			editor.getEditor().setVisible(false);
 	}
 	
 	/**

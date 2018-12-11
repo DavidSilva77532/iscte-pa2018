@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.eclipse.swt.widgets.Label;
+
 import pa.iscde.conventionchecker.service.ConventionCheckerService;
 import pa.iscde.conventionchecker.service.LogExt;
 import pa.iscde.conventionchecker.visitor.ConventionVisitor;
@@ -14,7 +16,7 @@ public class ConventionCheckerServiceImpl implements ConventionCheckerService{
 	private ConventionVisitor checker;
 	private ConventionRules rules;
 	private JavaEditorServices javaServ;
-	
+
 	public ConventionCheckerServiceImpl () {
 		rules = new ConventionRules();
 		this.checker = new ConventionVisitor(rules);

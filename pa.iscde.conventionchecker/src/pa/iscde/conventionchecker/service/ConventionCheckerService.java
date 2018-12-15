@@ -27,7 +27,7 @@ public interface ConventionCheckerService {
 	void addListener(ConventionCheckerListener listener);
 	
 	/**
-	 * Removes a ConventionCheckerListener to the service
+	 * Removes a ConventionCheckerListener from the service
 	 * 
 	 * @param listener that was previously listening to the service
 	 */

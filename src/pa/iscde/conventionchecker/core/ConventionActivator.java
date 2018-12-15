@@ -1,10 +1,17 @@
 package pa.iscde.conventionchecker.core;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.conventionchecker.service.ConventionCheckerListener;
 import pa.iscde.conventionchecker.service.ConventionCheckerService;
+import pa.iscde.conventionchecker.service.LogExt;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
@@ -16,6 +23,7 @@ public class ConventionActivator implements BundleActivator {
 	private static ConventionCheckerService conventionService;
 	private static JavaEditorServices editorServices;
 	private static ProjectBrowserServices browserServices;
+	private Set<ConventionCheckerListener> listeners = new HashSet<>();
 
 	/**
 	 * Get Activator class since its working as Singleton.
@@ -94,6 +102,31 @@ public class ConventionActivator implements BundleActivator {
 	 */
 	public static ProjectBrowserServices getJavaBrowserService() {
 		return browserServices;
+	}
+	
+	/**
+	 * Adds a new listener to the convention checker service
+	 * @param listener to be added
+	 */
+	public void addListener(ConventionCheckerListener listener) {
+		listeners.add(listener);	
+	}
+	
+	/**
+	 * Removes an existing listener from the convention checker service
+	 * @param listener to be removed
+	 */
+	public void removeListener(ConventionCheckerListener listener) {
+		listeners.remove(listener);
+	}
+	
+	/**
+	 * Notify's all listeners with the current convention errors
+	 * @param conventionErrors that were found in the last run
+	 */
+	public void notifyListeners(ArrayList<LogExt> conventionErrors) {
+		for(ConventionCheckerListener l : listeners)
+			l.checkingFinished(conventionErrors);
 	}
 
 }

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,20 +14,35 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
+import org.osgi.framework.Bundle;
+
 import pa.iscde.conventionchecker.view.ConventionCheckerView;
 
 
 public class ConventionRules {
-	private Map<String, String> rules;
-	private final String FOLDERLOCATION = ConventionCheckerView.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/rules";
+	private Map<String, String> rules = new HashMap<String, String>();;
+	private String FOLDERLOCATION = ConventionCheckerView.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/rules";
 	private String currentProfile = "default";
 	private String fileLocation = FOLDERLOCATION + "/" + currentProfile + ".file";
 
 	/**
 	 * Creates the rule object reading the default rules from the existing file
+	 * @return ConventionRules object that manages the rules
 	 */
 	public ConventionRules() {
-		rules = new HashMap<String, String>();
+		readRulesFile(); 
+	}
+	
+	/**
+	 * Creates the rule object, reading the default rules from the existing file
+	 * @param p_folderLocation the location of the folder with the rule files stored
+	 * @return ConventionRules object that manages the rules
+	 */
+	public ConventionRules(String p_folderLocation) {
+		FOLDERLOCATION = p_folderLocation;
+		fileLocation = FOLDERLOCATION + "/" + currentProfile + ".file";
 		readRulesFile(); 
 	}
 	

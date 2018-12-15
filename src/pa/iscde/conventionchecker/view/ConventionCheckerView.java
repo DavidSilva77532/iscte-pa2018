@@ -37,6 +37,7 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 public class ConventionCheckerView implements PidescoView {
 	private RulesTable conventionTable;
 	private ConventionCheckerServiceImpl conventionService;
+	private Combo combo;
 	
 	public ConventionCheckerView() {
 		this.conventionService = (ConventionCheckerServiceImpl) ConventionActivator.getInstance().getConventionService();
@@ -80,13 +81,13 @@ public class ConventionCheckerView implements PidescoView {
         
 	    ToolItem comboTool = new ToolItem(viewArea, SWT.SEPARATOR);
 
-		Combo combo = new Combo(viewArea, SWT.DROP_DOWN | SWT.READ_ONLY);
+		combo = new Combo(viewArea, SWT.DROP_DOWN | SWT.READ_ONLY);
 		String[] items = conventionService.getProfiles();
 		combo.setItems(items);
 		combo.select(0);
-		
+
 		combo.pack();
-		comboTool.setWidth(combo.getSize().x);
+		comboTool.setWidth(150);
 		comboTool.setControl(combo);
 		
 		 // User select a item in the Combo.
@@ -123,8 +124,7 @@ public class ConventionCheckerView implements PidescoView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				conventionService.resetStack();
-				Parser.parseAll(ConventionActivator.getJavaBrowserService().getRootPackage().getChildren(), conventionService.getVisitor());
-				conventionService.annotateCurrentFile();
+				conventionService.parseAll();
 				conventionTable.hideEditor();
 			}
 			
@@ -140,7 +140,7 @@ public class ConventionCheckerView implements PidescoView {
 	 * 
 	 * @param p_view
 	 */
-	public void createTable(Composite p_view) {
+	private void createTable(Composite p_view) {
 		conventionTable = new RulesTable(conventionService.getRuleManager(), p_view);
 	}
 	
@@ -167,24 +167,20 @@ public class ConventionCheckerView implements PidescoView {
 		
 		ToolBar comboToolbar = new ToolBar(viewArea, SWT.NONE);
 		createComboBox(comboToolbar);
-		
-		
-		Parser.parseAll(ConventionActivator.getJavaBrowserService().getRootPackage().getChildren(), conventionService.getVisitor());
-		conventionService.annotateCurrentFile();
+				
+		conventionService.parseAll();
 				
 		JavaEditorListener listener = new JavaEditorListener.Adapter() {
 			@Override
 			public void fileSaved(File file) {
 				conventionService.resetStack(file.getAbsolutePath());
-				Parser.parse(file, conventionService.getVisitor());
-				conventionService.annotateCurrentFile();
+				conventionService.parse(file);
 			}
 			
 			@Override
 			public void fileOpened(File file) {
 				conventionService.resetStack(file.getAbsolutePath());
-				Parser.parse(file, conventionService.getVisitor());
-				conventionService.annotateCurrentFile(file);
+				conventionService.parse(file);
 			}
 		};
 		
@@ -214,6 +210,9 @@ public class ConventionCheckerView implements PidescoView {
 			// I don't want to override the same profiles that were loaded (and possibly changed) before
 			if (!conventionService.getRuleManager().profileExists(profileName)) {
 				conventionService.addNewProfile(profileName, rows);
+				String[] items = conventionService.getProfiles();
+				combo.setItems(items);
+				combo.select(0);
 			}
 
 		}

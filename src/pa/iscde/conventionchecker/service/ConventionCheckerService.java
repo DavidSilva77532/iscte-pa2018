@@ -18,4 +18,20 @@ public interface ConventionCheckerService {
 	 * @return an array with all the errors from the specified file
 	 */
 	ArrayList<LogExt> getFileConventionErrors(String p_filePath);
+	
+	/**
+	 * Adds a ConventionCheckerListener to the service
+	 * 
+	 * @param listener that will be listening to the service
+	 */
+	void addListener(ConventionCheckerListener listener);
+	
+	/**
+	 * Removes a ConventionCheckerListener to the service
+	 * 
+	 * @param listener that was previously listening to the service
+	 */
+	void removeListener(ConventionCheckerListener listener);
+	
+	
 }

@@ -22,7 +22,7 @@ public class Activator implements BundleActivator {
 		// get the service
 		ServiceReference<ConventionCheckerService> serviceReference = bundleContext.getServiceReference(ConventionCheckerService.class);
 		ConventionCheckerService test = bundleContext.getService(serviceReference);
-		
+
 		listener l = new listener();
 		test.addListener(l);
 	}

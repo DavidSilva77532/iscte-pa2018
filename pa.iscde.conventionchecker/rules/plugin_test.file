@@ -1,0 +1,6 @@
+Variable=[a-z]+
+Constant=C_.*
+Parameter=p_*
+Class=
+Method=
+Interface=

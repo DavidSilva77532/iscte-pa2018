@@ -10,6 +10,14 @@
             variable="[a-z]+">
       </ConventionCheckerExtension>
    </extension>
+   <extension
+         id="id1"
+         name="testConventionView"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.conventionchecker.test.testView">
+      </view>
+   </extension>
 
    
    

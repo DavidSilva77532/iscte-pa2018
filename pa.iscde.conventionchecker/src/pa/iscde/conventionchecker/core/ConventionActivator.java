@@ -125,7 +125,7 @@ public class ConventionActivator implements BundleActivator {
 	 * @param conventionErrors that were found in the last run
 	 */
 	public void notifyListeners(ArrayList<LogExt> conventionErrors) {
-		for(ConventionCheckerListener l : listeners)
+		for(ConventionCheckerListener l : listeners) 
 			l.checkingFinished(conventionErrors);
 	}
 

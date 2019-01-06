@@ -42,6 +42,9 @@ public class ConventionCheckerView implements PidescoView {
 	public ConventionCheckerView() {
 		this.conventionService = (ConventionCheckerServiceImpl) ConventionActivator.getInstance().getConventionService();
 		this.conventionService.setJavaEditor(ConventionActivator.getInstance().getJavaEditorService());
+
+		// Parse all the files when the application starts
+		this.conventionService.parseAll();
 	}
 	
 	
@@ -145,14 +148,15 @@ public class ConventionCheckerView implements PidescoView {
 	}
 	
 	/**
-	 * Starts my convention checker components. 
+	 * Starts my convention checker components - buttons, table and combo. 
+	 * Adds listeners to the editor component.
 	 * 
 	 * @param viewArea
 	 * @param imageMap
 	 */
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-		// Avoid components being separated
+		// Use a gridLayout with 1 column to avoid components being separated
 		GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = 1;
 		viewArea.setLayout(gridLayout);
@@ -168,8 +172,7 @@ public class ConventionCheckerView implements PidescoView {
 		ToolBar comboToolbar = new ToolBar(viewArea, SWT.NONE);
 		createComboBox(comboToolbar);
 				
-		conventionService.parseAll();
-				
+		// Add listeners to update rules when a file is saved/opened
 		JavaEditorListener listener = new JavaEditorListener.Adapter() {
 			@Override
 			public void fileSaved(File file) {
@@ -189,7 +192,7 @@ public class ConventionCheckerView implements PidescoView {
 	}
 	
 	/**
-	 * Go through our extension points and execute methods for whatever plugin's that are connected
+	 * Go through our extension points and add custom profiles for whatever plugin's that are connected
 	 * 
 	 * @param viewArea
 	 */
@@ -197,6 +200,7 @@ public class ConventionCheckerView implements PidescoView {
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		IConfigurationElement[] elements = reg.getConfigurationElementsFor("pa.iscde.conventionchecker.ConventionCheckerExtension");
 
+		// loop through the extensions
 		for(IConfigurationElement e : elements) {
 			Map<String, String> rows = new HashMap();
 			String profileName = e.getAttribute("profileName");

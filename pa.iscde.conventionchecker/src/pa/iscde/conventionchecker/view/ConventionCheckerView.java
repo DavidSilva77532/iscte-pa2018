@@ -172,6 +172,8 @@ public class ConventionCheckerView implements PidescoView {
 		ToolBar comboToolbar = new ToolBar(viewArea, SWT.NONE);
 		createComboBox(comboToolbar);
 				
+		this.conventionService.parseAll();
+
 		// Add listeners to update rules when a file is saved/opened
 		JavaEditorListener listener = new JavaEditorListener.Adapter() {
 			@Override

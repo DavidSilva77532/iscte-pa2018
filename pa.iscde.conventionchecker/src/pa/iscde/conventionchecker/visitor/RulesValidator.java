@@ -45,7 +45,6 @@ public class RulesValidator {
 	 * @param p_fileName
 	 */
 	public ArrayList<LogExt> resetStack(String p_fileName) {
-		//TODO- refactor this to use a global map instead of looping through the existing array			
 		for(Iterator<LogExt> it = stack.iterator(); it.hasNext();) {
 			LogExt log = it.next();
 			if (log.getFilePath().equals(p_fileName))
@@ -67,7 +66,6 @@ public class RulesValidator {
 	 * @return all errors found
 	 */
 	public ArrayList<LogExt> getStack(String p_fileName){
-		//TODO- refactor this to use a global map instead of looping through the existing array
 		ArrayList<LogExt> retStack = new ArrayList<>();
 		
 		for(LogExt log : stack) {

@@ -108,8 +108,6 @@ public class RulesTable {
             	}
             });
                        
-            //newEditor.selectAll();
-            //newEditor.setFocus();
             editor.setEditor(newEditor, item, EDITABLECOLUMN);
             
           }
